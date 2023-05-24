@@ -8,6 +8,8 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { DatabaseModule } from './database/database.module';
 import { environments } from './environments';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import { CloudinaryService } from './cloudinary/services/cloudinary.service';
 import config from './config';
 
 @Module({
@@ -23,13 +25,17 @@ import config from './config';
         MONGO_PORT: Joi.number().required(),
         MONGO_HOST: Joi.string().required(),
         MONGO_CONNECTION: Joi.string().required(),
+        CLOUDINARY_CLOUD_NAME: Joi.string().required(),
+        CLOUDINARY_API_KEY: Joi.string().required(),
+        CLOUDINARY_API_SECRET: Joi.string().required(),
       }),
     }),
     HttpModule,
     UsersModule,
     DatabaseModule,
+    CloudinaryModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, CloudinaryService],
 })
 export class AppModule {}
