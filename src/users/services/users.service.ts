@@ -14,6 +14,7 @@ export class UsersService {
 
   /**
    * @description Muestra todos los usuarios de la  bbdd
+   * @returns {Promise<User[]>} Lista de todos los usuarios de la base de datos
    */
   async getAllUsers() {
     return await this.userModel.find().exec();
@@ -22,6 +23,7 @@ export class UsersService {
   /**
    * @description Muestra a un usuario de la bbdd
    * @param {string} id Id del usuario que se desea encontrar
+   * @returns {Promise<User>} Detalles del usuario solicitado
    */
   async findOneUser(id: string) {
     const user = await this.userModel.findById(id).exec();
@@ -34,6 +36,7 @@ export class UsersService {
   /**
    * @description Crea a un usuario en la bbdd
    * @param {CreateUserDto} data Informacion del usuario a ser creado
+   * @returns {Promise<User>} Usuario creado
    */
   async createUser(data: CreateUserDto) {
     const { photo } = data;
@@ -50,6 +53,7 @@ export class UsersService {
    * @description Modifica a un usuario de la bbdd
    * @param {string} id Id del usuario que se desea encontrar
    * @param {UpdateUserDto} changes Cambios que se van a aplicar al usuario
+   * @returns {Promise<User>} Usuario actualizado
    */
   async updateUser(id: string, changes: UpdateUserDto) {
     const { photo } = changes;
@@ -73,6 +77,7 @@ export class UsersService {
   /**
    * @description Elimina a un usuario de la bbdd
    * @param {string} id Id del usuario que se desea eliminar
+   * @returns {Promise<Void>} Usuario eliminado
    */
   async removeUser(id: string) {
     const userToDelete = await this.userModel.findByIdAndRemove(id);
