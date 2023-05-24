@@ -1,15 +1,35 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { HttpModule } from '@nestjs/axios';
+import * as Joi from 'joi';
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
-import { UsersController } from './users/controllers/users.controller';
-import { UsersService } from './users/services/users.service';
-import { UsersService } from './users/services/users.service';
-import { UsersController } from './users/controllers/users.controller';
+import { DatabaseModule } from './database/database.module';
+import { environments } from './environments';
+import config from './config';
 
 @Module({
-  imports: [UsersModule],
-  controllers: [AppController, UsersController],
-  providers: [AppService, UsersService],
+  imports: [
+    ConfigModule.forRoot({
+      envFilePath: environments[process.env.NODE_ENV] || '.env',
+      load: [config],
+      isGlobal: true,
+      validationSchema: Joi.object({
+        MONGO_INITDB_ROOT_USERNAME: Joi.string().required(),
+        MONGO_INITDB_ROOT_PASSWORD: Joi.string().required(),
+        MONGO_DB: Joi.string().required(),
+        MONGO_PORT: Joi.number().required(),
+        MONGO_HOST: Joi.string().required(),
+        MONGO_CONNECTION: Joi.string().required(),
+      }),
+    }),
+    HttpModule,
+    UsersModule,
+    DatabaseModule,
+  ],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}
